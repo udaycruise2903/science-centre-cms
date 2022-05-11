@@ -1,0 +1,7 @@
+{% load wagtailcore_tags wagtailimages_tags utility_tags %}
+
+{%  if value.active %}
+  <a class="swiper-slide" id="slide-{{ forloop.counter }}" href="{% if value.page %}{% pageurl value.page %}{% elif value.external_url %}{{ value.external_url }}{% else %}#{% endif %}">
+    {% image value.photo original class="swiper-slide__image" %}
+  </a>
+{% endif %}

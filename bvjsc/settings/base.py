@@ -24,8 +24,9 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
-    'search',
+    #'home',
+    #'search',
+    'bvjsc.core',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -88,13 +89,7 @@ WSGI_APPLICATION = 'bvjsc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME': 'bvjsc',
-    }
-}
+
 
 
 # Password validation

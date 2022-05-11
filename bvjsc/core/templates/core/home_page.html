@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      {% for slider_item in page.slider %}
+        {% include_block slider_item %}
+      {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+  <div class="home-priorities-section">
+    <div class="home-priorities">
+      <a class="home-priority home-priority-adoptions" href="{% slugurl 'adopt' %}">
+        <div class="home-priority__title">Adoptions</div>
+        <div class="home-priority__summary">Adopt. Love</div>
+        <div class="home-priority__button">Learn More</div>
+      </a>
+      <a class="home-priority home-priority-donations" href="{% slugurl 'invest-their-future' %}">
+        <div class="home-priority__title">Donations</div>
+        <div class="home-priority__summary">Make A Difference</div>
+        <div class="home-priority__button">Learn More</div>
+      </a>
+      <a class="home-priority home-priority-volunteers" href="{% slugurl 'volunteers' %}">
+        <div class="home-priority__title">Volunteers</div>
+        <div class="home-priority__summary">Change Lives</div>
+        <div class="home-priority__button">Learn More</div>
+      </a>
+    </div>
+  </div>
+  <div class="home-events-section">
+    <div class="home-events-section__content">
+        <h2 class="home-events-section__title">Upcoming Events</h2>
+        {% for event in events %}
+          <a class="home-events-section__event" href="{% pageurl event %}">
+            <div class="home-events-section__event-date">{{ event.start_date|date:'M<\s\p\a\n>j</\s\p\a\n>'|safe }}</div>
+            <div class="home-events-section__event-title">{{ event.title }}</div>
+          </a>
+        {% endfor %}
+        <div class="home-more-link home-more-link__events" ><a href="{% slugurl 'events' %}">All Events</a></div>
+    </div>
+  </div>
+</div>
+
+  <div class="home-animal-count-section">
+    <div class="home-animal-counts">
+      <a class="animal-count-block animal-count-block-cats" href="{% slugurl 'cats' %}">
+        <div class="animal-count"><span class="animal-count__value">{{ animal_counts.cats_adopted }}</span> Cats Adopted</div>
+        <div class="animal-count"><span class="animal-count__value">{{ animal_counts.cats_rescued }}</span> Cats Rescued</div>
+      </a>
+      <a class="animal-count-block animal-count-block-dogs" href="{% slugurl 'dogs' %}">
+        <div class="animal-count"><span class="animal-count__value">{{ animal_counts.dogs_adopted }}</span> Dogs Adopted</div>
+        <div class="animal-count"><span class="animal-count__value">{{ animal_counts.dogs_rescued }}</span> Dogs Rescued</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="home-news">
+    <div class="home-news__header">
+      <h2>News</h2>
+      <div class="home-more-link home-more-link__news"><a href="{% slugurl 'news'  %}">All News</a></div>
+    </div>
+    <div class="home-news-list">
+      {% for news_item in news %}
+        <a class="home-news-list__item{% if forloop.first %} first{% elif forloop.last %} last{% endif %}" href="{% pageurl news_item %}">
+          <div class="home-news-list__item-photo">{% image news_item.main_photo fill-275x205 %}</div>
+          <div class="home-news-list__item-details">
+            <div class="home-news-list__item-date">{{ news_item.first_published_at|date:'M j' }}</div>
+            <div class="home-news-list__item-title">{{ news_item.title }}</div>
+            <div class="home-news-list__item-summary">{{ news_item.details|richtext|striptags|truncatechars:80 }}</div>
+          </div>
+          <div class="home-news-list__item-full-post">Full Post</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
+
+{% block content_heading %}{% endblock content_heading %}
+
+{% block extra_pre_css %}
+  <link rel="stylesheet" href="{% static '3rdparty/swiper/css/swiper.min.css' %}">
+  <style>
+    {# Events image #}
+    .home-events-section {
+    {% image page.events_photo fill-500x475 as photo_1 %}
+      background: url({{ photo_1.url }}) no-repeat center top/cover;
+    }
+    @media screen and (min-width: 500px) {
+    {% image page.events_photo fill-800x475 as photo_2 %}
+      .home-events-section {
+        background-image: url({{ photo_2.url }});
+      }
+    }
+    @media screen and (min-width: 800px) {
+    {% image page.events_photo original as photo_3 %}
+      .home-events-section {
+        background-image: url({{ photo_3.url }});
+      }
+    }
+  </style>
+{% endblock extra_pre_css %}
+
+{% block extra_pre_javascript %}
+  <script src="{% static '3rdparty/swiper/js/swiper.min.js' %}"></script>
+{% endblock extra_pre_javascript %}
+
+{% block extra_javascript %}
+  <script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us15.list-manage.com","uuid":"c26f76b0683e590dc58d9596d","lid":"edbc3e05fc"}) })</script>
+  <script>
+    {# Swiper Slider: http://idangero.us/swiper/ #}
+    $(document).ready(function () {
+      var mySwiper = new Swiper('.swiper-container', {
+        direction: 'horizontal',
+        loop: true,
+        {% if page.has_multiple_slides %}
+          speed: 600,
+          autoplay: {
+            delay: 7000,
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+        {% endif %}
+      });
+    });
+  </script>
+{% endblock extra_javascript %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+  <div class="team">
+    {% for group_title, group_members in page.team_groups %}
+      <h2>{{ group_title }}</h2>
+      <div class="team-members">
+        {% for member in group_members %}
+          {% include_block member %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <div id="team-overlay" class="team-overlay team-overlay--hidden"></div>
+{% endblock content %}
+
+{% block extra_javascript %}
+  <script src="{% static 'dist/bio.js' %}"></script>
+{% endblock extra_javascript %}
